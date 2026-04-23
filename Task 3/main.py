@@ -6,12 +6,10 @@ import ollama
 
 app = FastAPI()
 
-# 🔥 Async wrapper for CPU-heavy tasks
 async def remove_bg_async(image_bytes):
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, remove, image_bytes)
 
-# 🔥 Async wrapper for Ollama
 async def get_caption(image_bytes):
     loop = asyncio.get_event_loop()
 
@@ -34,7 +32,6 @@ async def process_image(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
 
-        # Run both tasks concurrently 🔥
         caption_task = asyncio.create_task(get_caption(image_bytes))
         bg_task = asyncio.create_task(remove_bg_async(image_bytes))
 
